@@ -1,0 +1,40 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:15
+    container_name: bluesky-db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: bluesky
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  api:
+    build: ./api
+    container_name: bluesky-api
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/bluesky
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
+  scraper:
+    build: ./scraper
+    container_name: bluesky-scraper
+    command: python scraper.py
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/bluesky
+      - BLUESKY_IDENTIFIER=${BLUESKY_IDENTIFIER}
+      - BLUESKY_APP_PASSWORD=${BLUESKY_APP_PASSWORD}
+    depends_on:
+      - db
+
+volumes:
+  db_data:
