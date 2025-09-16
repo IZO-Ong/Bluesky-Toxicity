@@ -1,5 +1,6 @@
 version: "3.9"
 
+
 services:
   db:
     image: postgres:15
@@ -14,6 +15,7 @@ services:
     volumes:
       - db_data:/var/lib/postgresql/data
 
+
   api:
     build: ./api
     container_name: bluesky-api
@@ -27,14 +29,39 @@ services:
 
   scraper:
     build: ./scraper
+    image: bluesky-scraper:latest
     container_name: bluesky-scraper
-    command: python scraper.py
+    command: python runner.py
     environment:
       - DATABASE_URL=postgresql://postgres:postgres@db:5432/bluesky
       - BLUESKY_IDENTIFIER=${BLUESKY_IDENTIFIER}
       - BLUESKY_APP_PASSWORD=${BLUESKY_APP_PASSWORD}
     depends_on:
       - db
+
+  airflow:
+    build:
+      context: .
+      dockerfile: Dockerfile.airflow
+    container_name: bluesky-airflow
+    restart: always
+    environment:
+      - AIRFLOW__CORE__LOAD_EXAMPLES=False
+      - AIRFLOW__CORE__EXECUTOR=SequentialExecutor
+      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://postgres:postgres@db:5432/airflow
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "8080:8080"
+    command: >
+      bash -c "
+      airflow db init &&
+      airflow users create --username admin --password admin --firstname Admin --lastname User --role Admin --email admin@example.com &&
+      airflow webserver -p 8080 & airflow scheduler
+      "
+
+
 
 volumes:
   db_data:

@@ -2,3 +2,4 @@ httpx
 psycopg2-binary
 detoxify
 torch
+python-dotenv

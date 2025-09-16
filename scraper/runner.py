@@ -2,8 +2,8 @@ import os
 import httpx
 import datetime
 import time
-from scraper.db import insert_post
-from scraper.toxicity import score_toxicity
+from db import insert_post, init_db
+from toxicity import score_toxicity
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -52,6 +52,7 @@ def fetch_posts(token, query="python", limit=1000):
     return posts[:limit]
 
 def run_scraper():
+    init_db()
     token = create_session()
     posts = fetch_posts(token, query="data")
     for p in posts:
