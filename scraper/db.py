@@ -2,7 +2,7 @@ import os
 import psycopg2
 from psycopg2.extras import execute_values
 
-DB_URL = os.getenv("DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/bluesky")
+DB_URL = os.environ["DATABASE_URL"]
 
 def get_conn():
     return psycopg2.connect(DB_URL)
