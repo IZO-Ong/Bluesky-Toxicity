@@ -37,6 +37,7 @@ cd bluesky-toxicity
 ### 2. Environment variables
 
 Create a `.env` file at the project root:
+
 ```ini
 # Bluesky
 BLUESKY_IDENTIFIER=your-handle.bsky.social
@@ -57,9 +58,17 @@ AIRFLOW__CORE__EXECUTOR=LocalExecutor
 AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://postgres:postgres@db:5432/airflow
 ```
 
-Create a separate .env.local inside frontend/:
+Create a separate `.env.local` inside `frontend/`:
+
+```ini
 # Next.js
 NEXT_PUBLIC_API_URL=http://api:8000
+```
+
+### 3. Start with Docker Compose
+```bash
+docker compose up --build
+```
 
 ### 3. Run with Docker
 ```bash
