@@ -57,11 +57,23 @@ export default function Page() {
       {/* Full-width Graph */}
       <section>
         <h2 className="text-2xl font-semibold flex items-center justify-center gap-2 mb-4">
-          📈 Last 30 Days
+          Bluesky Toxicity over Last 30 Days
         </h2>
         <div className="w-full h-[400px]">
           <LineChart stats={stats} />
         </div>
+      </section>
+
+      {/* Credits */}
+      <section className="text-center text-gray-500 text-sm">
+        <p>
+          Powered by the <span className="font-medium">Detoxify</span> model
+          from <a href="https://unitary.ai" target="_blank" rel="noopener noreferrer" className="underline">Unitary AI</a>
+        </p>
+        <p>
+          Built with <span className="font-medium">Next.js</span> · Created by{" "}
+          <span className="font-semibold">Isaac</span>
+        </p>
       </section>
     </main>
   );

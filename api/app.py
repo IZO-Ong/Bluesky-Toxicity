@@ -50,7 +50,7 @@ def leaderboard_today():
         SELECT uri, author, text, likes, toxicity
         FROM posts
         WHERE created_at::date = CURRENT_DATE
-          AND likes > 10
+          AND likes >= 5
         ORDER BY toxicity DESC
         LIMIT 1
         """,
@@ -62,7 +62,7 @@ def leaderboard_today():
         SELECT uri, author, text, likes, toxicity
         FROM posts
         WHERE created_at::date = CURRENT_DATE
-          AND likes > 10
+          AND likes >= 5
         ORDER BY toxicity ASC
         LIMIT 1
         """,

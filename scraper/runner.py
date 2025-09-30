@@ -1,6 +1,6 @@
 import os
 import httpx
-import datetime
+from datetime import datetime, timezone, timedelta
 import time
 from db import insert_post, init_db
 from toxicity import score_toxicity
@@ -22,21 +22,49 @@ def create_session():
     resp.raise_for_status()
     return resp.json()["accessJwt"]
 
-import time
-
-def fetch_posts(token, query="python", limit=1000):
+def fetch_posts(token, query="python", limit=1000, delay=0.1, max_retries=3, sort="top"):
     url = f"{BASE_URL}/app.bsky.feed.searchPosts"
     headers = {"Authorization": f"Bearer {token}"}
-    params = {"q": query}
+
+    now = datetime.now(timezone.utc)
+    yesterday = (now - timedelta(days=1))
+
+    params = {
+        "q": query,
+        "sort": sort,
+        "limit": 100,
+        "since": yesterday.isoformat(),
+        "until": now.isoformat()
+    }
+
     posts, cursor = [], None
 
     while len(posts) < limit:
-        if cursor:
+        # ✅ only include cursor if it’s valid
+        if cursor is not None:
             params["cursor"] = cursor
+        elif "cursor" in params:
+            del params["cursor"]
 
-        resp = httpx.get(url, headers=headers, params=params)
-        resp.raise_for_status()
-        data = resp.json()
+        retries = 0
+        while retries < max_retries:
+            try:
+                print(f"➡️ Requesting with params: {params}")  # debug
+                resp = httpx.get(url, headers=headers, params=params, timeout=10)
+                resp.raise_for_status()
+                data = resp.json()
+                break  # ✅ success
+            except httpx.HTTPStatusError as e:
+                print(f"⚠️ HTTP error {e.response.status_code} at cursor={cursor}, retry {retries+1}/{max_retries}")
+            except httpx.RequestError as e:
+                print(f"⚠️ Network error: {e}, retry {retries+1}/{max_retries}")
+
+            retries += 1
+            time.sleep(2 ** retries)  # exponential backoff
+
+        else:
+            print("❌ Max retries exceeded, stopping.")
+            break
 
         new_posts = data.get("posts", [])
         if not new_posts:
@@ -47,6 +75,7 @@ def fetch_posts(token, query="python", limit=1000):
         cursor = data.get("cursor")
 
         print(f"✅ Fetched {len(posts)} posts so far...")
+        time.sleep(delay)
 
     print(f"🎉 Done! Total posts fetched: {len(posts)}")
     return posts[:limit]
