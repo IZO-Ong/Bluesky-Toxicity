@@ -65,11 +65,6 @@ Create a separate `.env.local` inside `frontend/`:
 NEXT_PUBLIC_API_URL=http://api:8000
 ```
 
-### 3. Start with Docker Compose
-```bash
-docker compose up --build
-```
-
 ### 3. Run with Docker
 ```bash
 docker compose up -d --build
