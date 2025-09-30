@@ -10,6 +10,10 @@ services:
     volumes:
       - db_data:/var/lib/postgresql/data
       - ./init-db:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 10s
+      retries: 5
 
   api:
     build: ./api
@@ -17,10 +21,11 @@ services:
     command: gunicorn -b 0.0.0.0:8000 app:app
     env_file:
       - .env
+    depends_on:
+      db:
+        condition: service_healthy
     ports:
       - "8000:8000"
-    depends_on:
-      - db
 
   scraper:
     build: ./scraper
@@ -30,40 +35,18 @@ services:
     env_file:
       - .env
     depends_on:
-      - db
-    
+      db:
+        condition: service_healthy
+
   frontend:
     build: ./frontend
     container_name: bluesky-frontend
-    ports:
-      - "3000:3000"
     env_file:
       - ./frontend/.env.local
     depends_on:
       - api
-
-  airflow-webserver:
-    build:
-      context: .
-      dockerfile: Dockerfile.airflow
-    container_name: bluesky-airflow-web
-    restart: always
-    env_file:
-      - .env
-    volumes:
-      - ./dags:/opt/airflow/dags
-      - airflow_logs:/opt/airflow/logs
-      - /var/run/docker.sock:/var/run/docker.sock
     ports:
-      - "8080:8080"
-    depends_on:
-      - db
-    command: >
-      bash -c "
-      airflow db init &&
-      airflow users create --username admin --password admin --firstname Admin --lastname User --role Admin --email admin@example.com || true &&
-      airflow webserver
-      "
+      - "3000:3000"
 
   airflow-scheduler:
     build:
@@ -78,12 +61,37 @@ services:
       - airflow_logs:/opt/airflow/logs
       - /var/run/docker.sock:/var/run/docker.sock
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     command: >
       bash -c "
-      airflow db init &&
       airflow db migrate &&
+      airflow users create --username admin --password admin --firstname Admin --lastname User --role Admin --email admin@example.com || true &&
       airflow scheduler
+      "
+
+  airflow-webserver:
+    build:
+      context: .
+      dockerfile: Dockerfile.airflow
+    container_name: bluesky-airflow-web
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - airflow_logs:/opt/airflow/logs
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      db:
+        condition: service_healthy
+      airflow-scheduler:
+        condition: service_started
+    ports:
+      - "8080:8080"
+    command: >
+      bash -c "
+      airflow webserver
       "
 
 volumes:

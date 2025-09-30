@@ -22,7 +22,7 @@ def create_session():
     resp.raise_for_status()
     return resp.json()["accessJwt"]
 
-def fetch_posts(token, query="python", limit=1000, delay=0.1, max_retries=3, sort="top"):
+def fetch_posts(token, query="python", limit=2500, delay=0.1, max_retries=3, sort="top"):
     url = f"{BASE_URL}/app.bsky.feed.searchPosts"
     headers = {"Authorization": f"Bearer {token}"}
 
