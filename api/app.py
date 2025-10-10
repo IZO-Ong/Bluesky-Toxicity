@@ -32,7 +32,12 @@ def query_db(sql, params=(), one=False):
 app = Flask(__name__)
 
 # Enable CORS
-CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
+CORS(app, resources={r"/*": {
+    "origins": ["https://blueskytoxicity.org", "https://api.blueskytoxicity.org"],
+    "allow_headers": "*",
+    "methods": ["GET", "POST", "OPTIONS", "PUT", "DELETE"],
+    "supports_credentials": True
+}})
 
 
 # Root route
@@ -51,6 +56,8 @@ def leaderboard_today():
         FROM posts
         WHERE created_at::date = CURRENT_DATE
           AND likes >= 5
+          AND text IS NOT NULL
+          AND text <> ''
         ORDER BY toxicity DESC
         LIMIT 1
         """,
@@ -63,6 +70,8 @@ def leaderboard_today():
         FROM posts
         WHERE created_at::date = CURRENT_DATE
           AND likes >= 5
+          AND text IS NOT NULL
+          AND text <> ''
         ORDER BY toxicity ASC
         LIMIT 1
         """,

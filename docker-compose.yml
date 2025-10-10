@@ -25,7 +25,7 @@ services:
       db:
         condition: service_healthy
     ports:
-      - "8000:8000"
+      - "127.0.0.1:8000:8000"
 
   scraper:
     build: ./scraper
@@ -46,7 +46,7 @@ services:
     depends_on:
       - api
     ports:
-      - "3000:3000"
+      - "127.0.0.1:3000:3000"
 
   airflow-scheduler:
     build:
@@ -66,7 +66,7 @@ services:
     command: >
       bash -c "
       airflow db migrate &&
-      airflow users create --username admin --password admin --firstname Admin --lastname User --role Admin --email admin@example.com || true &&
+      airflow users create --username perfectgb2 --password TheRealKiller1 --firstname Admin --lastname User --role Admin --email admin@example.com || true &&
       airflow scheduler
       "
 
@@ -88,7 +88,7 @@ services:
       airflow-scheduler:
         condition: service_started
     ports:
-      - "8080:8080"
+      - "127.0.0.1:8080:8080"
     command: >
       bash -c "
       airflow webserver
