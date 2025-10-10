@@ -66,7 +66,7 @@ services:
     command: >
       bash -c "
       airflow db migrate &&
-      airflow users create --username perfectgb2 --password TheRealKiller1 --firstname Admin --lastname User --role Admin --email admin@example.com || true &&
+      airflow users create --username admin --password admin --firstname Admin --lastname User --role Admin --email admin@example.com || true &&
       airflow scheduler
       "
 
