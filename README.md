@@ -1,7 +1,20 @@
 # Bluesky Toxicity Classifier
 
-A small full-stack project that tracks and classifies toxic posts on [Bluesky](https://bsky.app).
-It combines scraping, an ETL pipeline, machine learning, and visualization into a near‑real‑time dashboard.
+> A small full-stack project that tracks and classifies toxic posts on [Bluesky](https://bsky.app).
+> It combines scraping, an ETL pipeline, machine learning, and visualization into a near‑real‑time dashboard.
+
+<p align="center">
+    <a href="https://blueskytoxicity.org">App</a> •
+    <a href="LICENSE">License</a>
+</p>
+
+<p align="center">
+    <em>Scrape → Score → Store → Serve → See — containerized, reproducible, and ready to extend.</em>
+</p>
+
+<p align="center">
+    <img alt="Python 3.11+" src="https://img.shields.io/badge/python-3.11%2B-blue" />
+</p>
 
 ---
 
@@ -104,3 +117,8 @@ Airflow orchestrating the scraper and ETL tasks:
 - Toxicity classification by [Detoxify](https://github.com/unitaryai/detoxify) (Unitary AI)
 - Built with [Next.js](https://nextjs.org/) and [Flask](https://flask.palletsprojects.com/)
 - Created by Isaac Ong
+
+---
+
+## License
+See [LICENSE](LICENSE).
