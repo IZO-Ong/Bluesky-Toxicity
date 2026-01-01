@@ -72,7 +72,14 @@ export default function Page() {
         </p>
         <p>
           Built with <span className="font-medium">Next.js</span> · Created by{" "}
-          <span className="font-semibold">Isaac</span>
+          <a 
+            href="https://github.com/IZO-Ong" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="font-semibold underline hover:text-gray-700 transition-colors"
+          >
+            Isaac Ong
+          </a>
         </p>
       </section>
     </main>
