@@ -108,7 +108,6 @@ Airflow orchestrating the scraper and ETL tasks:
 - Database: PostgreSQL
 - Scheduler/Orchestration: Apache Airflow
 - Infra: Docker & Docker Compose
-- Deployment: Nginx reverse proxy on VPS (domain: blueskytoxicity.org)
 
 ---
 
