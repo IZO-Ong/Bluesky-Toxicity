@@ -31,12 +31,10 @@ with DAG(
         auto_remove=True,
         mount_tmp_dir=False,
         
-        # PERSISTENCE: Mounts the host cache to the container 
-        # so the 418MB model doesn't download every 6 hours.
         mounts=[
             Mount(
-                source="/home/ubuntu/.cache/torch", # Path on your EC2 host
-                target="/root/.cache/torch",        # Path inside the container
+                source="/home/ubuntu/.cache/torch",
+                target="/root/.cache/torch",
                 type="bind"
             )
         ],

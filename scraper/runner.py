@@ -48,15 +48,15 @@ def fetch_posts(token, query="python", limit=2500, delay=0.1, max_retries=3, sor
         retries = 0
         while retries < max_retries:
             try:
-                print(f"➡️ Requesting with params: {params}")  # debug
+                print(f"Requesting with params: {params}")  # debug
                 resp = httpx.get(url, headers=headers, params=params, timeout=10)
                 resp.raise_for_status()
                 data = resp.json()
                 break  # success
             except httpx.HTTPStatusError as e:
-                print(f"⚠️ HTTP error {e.response.status_code} at cursor={cursor}, retry {retries+1}/{max_retries}")
+                print(f"HTTP error {e.response.status_code} at cursor={cursor}, retry {retries+1}/{max_retries}")
             except httpx.RequestError as e:
-                print(f"⚠️ Network error: {e}, retry {retries+1}/{max_retries}")
+                print(f"Network error: {e}, retry {retries+1}/{max_retries}")
 
             retries += 1
             time.sleep(2 ** retries)  # exponential backoff

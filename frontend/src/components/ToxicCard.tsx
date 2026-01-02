@@ -36,7 +36,7 @@ export default function ToxicCard({
           isMost ? "text-red-600" : "text-green-600"
         }`}
       >
-        {isMost ? "Today’s Most Toxic" : "Today’s Least Toxic"}
+        {isMost ? "Yesterday’s Most Toxic" : "Yesterday’s Least Toxic"}
       </h2>
 
       {author && text && likes !== undefined && toxicity !== undefined ? (
