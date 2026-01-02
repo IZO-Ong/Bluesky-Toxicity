@@ -12,7 +12,7 @@ def get_conn():
         except psycopg2.OperationalError as e:
             print(f"⚠️ Connection failed (attempt {i+1}/5). Retrying in 2s...")
             time.sleep(2)
-    raise Exception("❌ Could not connect to the database after 5 attempts.")
+    raise Exception("Could not connect to the database after 5 attempts.")
 
 def init_db():
     print("🔄 Initializing database...")
@@ -29,4 +29,13 @@ def init_db():
                 toxicity FLOAT
             )
             """)
-    print("✅ DB initialized")
+    print("DB initialized")
+
+def insert_post(uri, author, created_at, text, likes, toxicity):
+    with get_conn() as conn:
+        with conn.cursor() as cur:
+            cur.execute("""
+            INSERT INTO posts (uri, author, created_at, text, likes, toxicity)
+            VALUES (%s, %s, %s, %s, %s, %s)
+            ON CONFLICT (uri) DO NOTHING
+            """, (uri, author, created_at, text, likes, toxicity))

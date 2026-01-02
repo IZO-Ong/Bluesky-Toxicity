@@ -7,7 +7,7 @@ start_time = time.time()
 model = Detoxify("original")
 
 end_time = time.time()
-print(f"✅ Model loaded successfully in {end_time - start_time:.2f} seconds")
+print(f"Model loaded successfully in {end_time - start_time:.2f} seconds")
 
 def score_toxicity(text: str) -> float:
     if not text:

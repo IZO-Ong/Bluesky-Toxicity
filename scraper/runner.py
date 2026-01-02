@@ -40,7 +40,6 @@ def fetch_posts(token, query="python", limit=2500, delay=0.1, max_retries=3, sor
     posts, cursor = [], None
 
     while len(posts) < limit:
-        # ✅ only include cursor if it’s valid
         if cursor is not None:
             params["cursor"] = cursor
         elif "cursor" in params:
@@ -53,7 +52,7 @@ def fetch_posts(token, query="python", limit=2500, delay=0.1, max_retries=3, sor
                 resp = httpx.get(url, headers=headers, params=params, timeout=10)
                 resp.raise_for_status()
                 data = resp.json()
-                break  # ✅ success
+                break  # success
             except httpx.HTTPStatusError as e:
                 print(f"⚠️ HTTP error {e.response.status_code} at cursor={cursor}, retry {retries+1}/{max_retries}")
             except httpx.RequestError as e:
@@ -63,21 +62,21 @@ def fetch_posts(token, query="python", limit=2500, delay=0.1, max_retries=3, sor
             time.sleep(2 ** retries)  # exponential backoff
 
         else:
-            print("❌ Max retries exceeded, stopping.")
+            print("Max retries exceeded, stopping.")
             break
 
         new_posts = data.get("posts", [])
         if not new_posts:
-            print("⚠️ No more posts available, stopping.")
+            print("No more posts available, stopping.")
             break
 
         posts.extend(new_posts)
         cursor = data.get("cursor")
 
-        print(f"✅ Fetched {len(posts)} posts so far...")
+        print(f"Fetched {len(posts)} posts so far...")
         time.sleep(delay)
 
-    print(f"🎉 Done! Total posts fetched: {len(posts)}")
+    print(f"Finished. Total posts fetched: {len(posts)}")
     return posts[:limit]
 
 def run_scraper():
