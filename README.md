@@ -93,11 +93,11 @@ docker compose up -d --build
 ---
 
 ## Dashboard Preview
-![Web Dashboard](docs/images/web-dashboard.jpg)
+![Web Dashboard](docs/images/web-dashboard.png)
 
 ## Airflow UI
 Airflow orchestrating the scraper and ETL tasks:
-![Airflow UI](docs/images/airflow-ui.jpg)
+![Airflow UI](docs/images/airflow-ui.png)
 
 ---
 
