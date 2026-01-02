@@ -1,3 +1,6 @@
+# Use standard PyPI for most things
+--extra-index-url https://download.pytorch.org/whl/cpu
+
 httpx
 psycopg2-binary
 detoxify

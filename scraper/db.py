@@ -1,12 +1,21 @@
 import os
 import psycopg2
+import time
 
 DB_URL = os.environ["DATABASE_URL"]
 
 def get_conn():
-    return psycopg2.connect(DB_URL)
+    # Attempt to connect up to 5 times
+    for i in range(5):
+        try:
+            return psycopg2.connect(DB_URL)
+        except psycopg2.OperationalError as e:
+            print(f"⚠️ Connection failed (attempt {i+1}/5). Retrying in 2s...")
+            time.sleep(2)
+    raise Exception("❌ Could not connect to the database after 5 attempts.")
 
 def init_db():
+    print("🔄 Initializing database...")
     with get_conn() as conn:
         with conn.cursor() as cur:
             cur.execute("""
@@ -21,12 +30,3 @@ def init_db():
             )
             """)
     print("✅ DB initialized")
-
-def insert_post(uri, author, created_at, text, likes, toxicity):
-    with get_conn() as conn:
-        with conn.cursor() as cur:
-            cur.execute("""
-            INSERT INTO posts (uri, author, created_at, text, likes, toxicity)
-            VALUES (%s, %s, %s, %s, %s, %s)
-            ON CONFLICT (uri) DO NOTHING
-            """, (uri, author, created_at, text, likes, toxicity))
