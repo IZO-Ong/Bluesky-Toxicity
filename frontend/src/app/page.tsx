@@ -30,7 +30,7 @@ export default function Page() {
           Bluesky Toxicity Dashboard
         </h1>
         <p className="text-gray-500 mt-2">
-          A real-time look at toxicity trends in Bluesky posts
+          A look at toxicity trends in Bluesky posts
         </p>
       </header>
 

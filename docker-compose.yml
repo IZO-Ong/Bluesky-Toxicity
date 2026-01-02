@@ -17,8 +17,9 @@ services:
 
   api:
     build: ./api
-    expose:
-      - "8000"
+    # Changed from expose to ports for better connectivity
+    ports:
+      - "8000:8000"
     container_name: bluesky-api
     command: gunicorn -b 0.0.0.0:8000 app:app
     env_file:
@@ -40,14 +41,18 @@ services:
 
   frontend:
     build: ./frontend
-    expose:
-      - "3000"
+    # Change expose to ports
+    ports:
+      - "3000:3000"
     container_name: bluesky-frontend
+    environment:
+      - HOSTNAME=0.0.0.0
+      - PORT=3000
     env_file:
       - ./frontend/.env.local
     depends_on:
       - api
-  
+
   nginx:
     image: nginx:alpine
     container_name: bluesky-nginx

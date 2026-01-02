@@ -54,7 +54,7 @@ def leaderboard_today():
         """
         SELECT uri, author, text, likes, toxicity
         FROM posts
-        WHERE created_at::date = CURRENT_DATE
+          WHERE created_at::date = CURRENT_DATE
           AND likes >= 5
           AND text IS NOT NULL
           AND text <> ''
