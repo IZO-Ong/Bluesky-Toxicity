@@ -43,18 +43,18 @@ CORS(app, resources={r"/*": {
 # Root route
 @app.route("/")
 def root():
-    return jsonify({"message": "Bluesky Toxicity API (Flask) is running 🚀"})
+    return jsonify({"message": "Bluesky Toxicity API (Flask) is running"})
 
 
 # Leaderboard
-@app.route("/leaderboard/today")
-def leaderboard_today():
-    """Get most and least toxic posts today (likes > 10)."""
+@app.route("/leaderboard/yesterday")
+def leaderboard_yesterday():
+    """Get most and least toxic posts yesterday (likes > 10)."""
     most = query_db(
         """
         SELECT uri, author, text, likes, toxicity
         FROM posts
-        WHERE created_at::date = CURRENT_DATE
+        WHERE created_at::date = CURRENT_DATE - INTERVAL '1 day'
           AND likes >= 5
           AND text IS NOT NULL
           AND text <> ''
@@ -68,7 +68,7 @@ def leaderboard_today():
         """
         SELECT uri, author, text, likes, toxicity
         FROM posts
-        WHERE created_at::date = CURRENT_DATE
+        WHERE created_at::date = CURRENT_DATE - INTERVAL '1 day'
           AND likes >= 5
           AND text IS NOT NULL
           AND text <> ''

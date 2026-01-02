@@ -20,7 +20,7 @@ def init_db():
                 toxicity FLOAT
             )
             """)
-    print("✅ DB initialized")
+    print("DB initialized")
 
 def insert_post(uri, author, created_at, text, likes, toxicity):
     with get_conn() as conn:

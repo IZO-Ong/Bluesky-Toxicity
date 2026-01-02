@@ -17,7 +17,7 @@ export default function Page() {
       .then((res) => res.json())
       .then(setStats);
 
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/leaderboard/today`)
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/leaderboard/yesterday`)
       .then((res) => res.json())
       .then(setLeaderboard);
   }, []);

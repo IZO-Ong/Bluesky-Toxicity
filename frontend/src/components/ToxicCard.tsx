@@ -11,7 +11,6 @@ interface ToxicCardProps {
   uri?: string;
 }
 
-// Convert at:// URIs to usable Bluesky web URLs
 function formatBlueskyUrl(uri: string) {
   const match = uri.match(/^at:\/\/(did:[^/]+)\/app\.bsky\.feed\.post\/(.+)$/);
   if (!match) return uri; // fallback if invalid
@@ -36,7 +35,7 @@ export default function ToxicCard({
           isMost ? "text-red-600" : "text-green-600"
         }`}
       >
-        {isMost ? "Today’s Most Toxic" : "Today’s Least Toxic"}
+        {isMost ? "Yesterday’s Most Toxic" : "Yesterday’s Least Toxic"}
       </h2>
 
       {author && text && likes !== undefined && toxicity !== undefined ? (
