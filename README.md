@@ -1,6 +1,6 @@
 # Bluesky Toxicity Tracker
 
-> A small full-stack project that tracks and classifies toxic posts on [Bluesky](https://bsky.app), combinomomg scraping, an ETL pipeline, machine learning and visualization into a dashboard.
+> A small full-stack project that tracks and classifies toxic posts on [Bluesky](https://bsky.app), combining scraping, an ETL pipeline, machine learning and visualization into a dashboard.
 
 <p align="center">
     <a href="https://blueskytoxicity.org">App</a> •
